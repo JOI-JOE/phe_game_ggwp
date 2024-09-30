@@ -1,0 +1,110 @@
+.btn-toggle {
+    margin: 0 1rem;
+    padding: 0;
+    position: relative;
+    border: none;
+    height: 1.5rem;
+    width: 3rem;
+    border-radius: 1.5rem;
+    color: #6b7381;
+    background: #bdc1c8;
+}
+.btn-toggle:focus,
+.btn-toggle.focus,
+.btn-toggle:focus.active,
+.btn-toggle.focus.active {
+    outline: none;
+}
+.btn-toggle:before,
+.btn-toggle:after {
+    line-height: 1.5rem;
+    width: 4rem;
+    text-align: center;
+    font-weight: 600;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    position: absolute;
+    bottom: 0;
+    transition: opacity 0.25s;
+}
+/* .btn-toggle:before {
+    content: "Off";
+    left: -4rem;
+}
+.btn-toggle:after {
+    content: "On";
+    right: -4rem;
+    opacity: 0.5;
+} */
+.btn-toggle > .handle {
+    position: absolute;
+    top: 0.1875rem;
+    left: 0.1875rem;
+    width: 1.125rem;
+    height: 1.125rem;
+    border-radius: 1.125rem;
+    background: #fff;
+    transition: left 0.25s;
+}
+.btn-toggle.active {
+    transition: background-color 0.25s;
+}
+.btn-toggle.active > .handle {
+    left: 1.6875rem;
+    transition: left 0.25s;
+}
+.btn-toggle.active:before {
+    opacity: 0.5;
+}
+.btn-toggle.active:after {
+    opacity: 1;
+}
+.btn-toggle.btn-secondary {
+    color: #6b7381;
+    background: #bdc1c8;
+}
+.btn-toggle.btn-secondary:before,
+.btn-toggle.btn-secondary:after {
+    color: #6b7381;
+}
+.btn-toggle.btn-secondary.active {
+    background-color: #ff8300;
+}
+
+/* input textare */
+/* .wrapper {
+    background: #fff;
+    border-radius: 5px;
+    padding: 5px 5px 10px;
+    box-shadow: 8px 8px 10px rgba(0, 0, 0, 0.06);
+} */
+.wrapper h2 {
+    color: #4671ea;
+    font-size: 28px;
+    text-align: center;
+}
+.wrapper textarea {
+    width: 100%;
+    resize: none;
+    height: 59px;
+    outline: none;
+    padding: 15px;
+    font-size: 16px;
+    border-radius: 5px;
+    max-height: 330px;
+    caret-color: #4671ea;
+    border: 1px solid #bfbfbf;
+}
+textarea::placeholder {
+    color: #b3b3b3;
+}
+textarea:is(:focus, :valid) {
+    padding: 14px;
+    border: 2px solid #4671ea;
+}
+textarea::-webkit-scrollbar {
+    width: 0px;
+}
+
+

@@ -1,0 +1,256 @@
+
+
+
+  <script>
+	var check_variant = true;
+	var fIndex = false; 	
+
+	var vrIdParam  = true, current_id = 1124698448;
+	
+	var selectedVariant = {
+		id: 1124698448,
+			option1: "Số 1",
+				option2: "",
+					option3: ""
+	};
+	
+
+	var selectCallbackQuickview  = function(variant, selector) {
+		if (variant){
+			current_id = variant.id;
+			if(variant.inventory_management == null){
+				jQuery('.product-available').find(".txt-inventory").html('');
+			}
+			else{
+				var inventoryQty = variant.inventory_quantity;
+				if(inventoryQty == 0){
+					jQuery('.product-available').find(".txt-inventory").html('Đã bán hết');
+				}else{
+					if (inventoryQty > 10){
+						jQuery('.product-available').find(".txt-inventory").html('');
+					}
+					else{
+						jQuery('.product-available').find(".txt-inventory").html('Đã bán gần hết');
+					}
+				}
+			}	
+			if(variant.featured_image != null){	
+				var imgVariant = Haravan.resizeImage(variant.featured_image.src,'compact').replace('https:','');
+				$(".mdcart-image img").attr("src",imgVariant);			
+			}
+			if(variant.sku != null ){
+				jQuery('.pro_sku').html('Mã sản phẩm: ' + '<strong>' + variant.sku + '</strong>');
+			}
+			if(variant.price < variant.compare_at_price){
+				var pro_sold = variant.price ;
+				var pro_comp = variant.compare_at_price / 100;
+				var sale = 100 - (pro_sold / pro_comp) ;
+				var kq_sale = Math.round(sale);
+
+				jQuery('.product-percent').html('<span class="pro-sale">-' + kq_sale + '%<br> OFF </span>');
+				var html = '<span>' + Haravan.formatMoney(pro_sold, "{{amount}}₫") + '</span>' + '<del>' + Haravan.formatMoney(variant.compare_at_price, "{{amount}}₫") + '</del>' + '<span class="pro-percent">-'+ kq_sale +'%</span>';	
+				jQuery('.mdcart-price').html(html);
+			} 
+			else {
+				jQuery('.mdcart-price').html("<span>" + Haravan.formatMoney(variant.price, "{{amount}}₫" + "</span>"));
+			}
+
+			if (variant.available){
+				jQuery('.mdcart-actions .btn-mdcart-confirm').removeAttr('disabled').removeClass('disabled').html("<span>Xác nhận</span>");
+				//	jQuery('#detail-product #buy-now').removeAttr('disabled').removeClass('disabled').html("<span>Mua ngay</span>").show();
+				check_variant = true;
+			} 
+			else {
+				jQuery('.mdcart-actions .btn-mdcart-confirm').addClass('disabled').attr('disabled', 'disabled').html("<span>Xác nhận</span>");
+				//jQuery('#detail-product-quickview #buy-now').addClass('disabled').attr('disabled', 'disabled').html("<span>Hết hàng</span>").hide();
+				check_variant = false;
+			}
+		}
+		else{
+			jQuery('.mdcart-actions .btn-mdcart-confirm').addClass('disabled').attr('disabled', 'disabled').html("<span>Xác nhận</span>");
+			//	jQuery('#detail-product-quickview #buy-now').addClass('disabled').attr('disabled', 'disabled').html("<span>Hết hàng</span>").hide();
+			check_variant = false;
+		}
+		return check_variant;
+	};
+	 jQuery(document).ready(function($){
+		 
+		 new Haravan.OptionSelectors("product-select-quickview", { product: {"available":true,"compare_at_price_max":0.0,"compare_at_price_min":0.0,"compare_at_price_varies":false,"compare_at_price":0.0,"content":null,"description":"<strong>Tạp chí GGWP số 01 (Đã có sẵn)</strong><p>Sau 1 thời gian dài lên ý tưởng thử nghiệm, GGWP 1 chính thức ra mắt – đánh dấu cột mốc mới trên chặng đường đầy tâm huyết của chúng mình, mong muốn tạo ra 1 ấn phẩm đọc thực sự chất lượng, chuyên nghiệp về video games. Với những bài viết được lựa chọn, sáng tác và biên tập kỹ càng về nhiều chủ đề, hy vọng GGWP sẽ trở thành “món ăn tinh thần” không thể thiếu của những người yêu games. Còn giờ thì … Good Game Well Played.<br><br><em><strong>MÔ TẢ</strong></em><br><strong><em>- Kích thước sách: 20x27cm<br>- Số trang: 132 trang in màu</em></strong><br>&nbsp;</p>","featured_image":"https://product.hstatic.net/200000249781/product/8_46e59d9aa2aa45c2a100c6182244dd59.jpg","handle":"tap-chi-ggwp-so-01","id":1055345396,"images":["https://product.hstatic.net/200000249781/product/8_46e59d9aa2aa45c2a100c6182244dd59.jpg","https://product.hstatic.net/200000249781/product/10_3266eae8fa7d49e1a17fcb3f224508f1.jpg","https://product.hstatic.net/200000249781/product/9_07e8d7093d884b478d0854908b0d1433.jpg","https://product.hstatic.net/200000249781/product/5_e7ac9c2c34294f828a033864ad092e0b.jpg","https://product.hstatic.net/200000249781/product/4_165dc977a61a46a0996d6b9b822f42c9.jpg","https://product.hstatic.net/200000249781/product/3_0a9acaa0388e42d499e799005b0371a9.jpg","https://product.hstatic.net/200000249781/product/1_cb779155692a483c8923e5904777afbf.jpg","https://product.hstatic.net/200000249781/product/6_191ff459c6df4317ad0542cfd0033edb.jpg"],"options":["LOẠI"],"price":13900000.0,"price_max":29800000.0,"price_min":13900000.0,"price_varies":true,"tags":[],"template_suffix":null,"title":"Tạp chí GGWP số 01","type":"Khác","url":"/products/tap-chi-ggwp-so-01","pagetitle":"Tạp chí GGWP số 01","metadescription":"Sau 1 thời gian dài lên ý tưởng thử nghiệm, GGWP 1 chính thức ra mắt – đánh dấu cột mốc mới trên chặng đường đầy tâm huyết của chúng mình, mong muốn tạo ra 1 ấn phẩm đọc thực sự chất lượng, chuyên nghiệp về video games.","variants":[{"id":1124698448,"barcode":null,"available":true,"price":13900000.0,"sku":null,"option1":"Số 1","option2":"","option3":"","options":["Số 1"],"inventory_quantity":2022.0,"old_inventory_quantity":2022.0,"title":"Số 1","weight":1000.0,"compare_at_price":0.0,"inventory_management":"haravan","inventory_policy":"deny","selected":false,"url":null,"featured_image":{"id":1393366841,"created_at":"0001-01-01T00:00:00","position":1,"product_id":1055345396,"updated_at":"0001-01-01T00:00:00","src":"https://product.hstatic.net/200000249781/product/8_46e59d9aa2aa45c2a100c6182244dd59.jpg","variant_ids":[1124698448]}},{"id":1124698446,"barcode":null,"available":false,"price":29800000.0,"sku":null,"option1":"Số 0 và 1","option2":"","option3":"","options":["Số 0 và 1"],"inventory_quantity":0.0,"old_inventory_quantity":0.0,"title":"Số 0 và 1","weight":200.0,"compare_at_price":0.0,"inventory_management":"haravan","inventory_policy":"deny","selected":false,"url":null,"featured_image":{"id":1393367054,"created_at":"0001-01-01T00:00:00","position":8,"product_id":1055345396,"updated_at":"0001-01-01T00:00:00","src":"https://product.hstatic.net/200000249781/product/6_191ff459c6df4317ad0542cfd0033edb.jpg","variant_ids":[1124698446]}}],"vendor":"Khác","published_at":"2024-06-14T14:27:38.624Z","created_at":"2024-06-14T14:44:02.423Z","not_allow_promotion":false}, onVariantSelected: selectCallbackQuickview,  enableHistoryState: false  });
+
+			// Add label if only one product option and it isn't 'Title'.
+			
+			$('#add-item-form-quickview .selector-wrapper:eq(0)').prepend('<label>LOẠI</label>');
+			  
+			 // Auto-select first available variant on page load.
+			 
+			 
+			 
+			 
+			 
+			 $('#add-item-form-quickview .single-option-selector:eq(0)').val("Số 1").trigger('change');
+				
+				
+				
+			 
+				
+				$('#add-item-form-quickview .selector-wrapper select').each(function(){
+					$(this).wrap( '<span class="custom-dropdown custom-dropdown--white"></span>');
+					$(this).addClass("custom-dropdown__select custom-dropdown__select--white");
+				});
+				 
+				 });
+</script>
+<script>
+	var swatch_size_qv = parseInt($('#add-item-form-quickview .select-swatch .swatch').length);
+	jQuery(document).on('click','#add-item-form-quickview .swatch input', function(e) {  
+		e.preventDefault();
+		var $this = $(this);
+		var _available = '';
+		$this.parent().siblings().find('label').removeClass('sd');
+		$this.next().addClass('sd');
+		var name = $this.attr('name');
+		var value = $this.val();
+		$('#add-item-form-quickview select[data-option='+name+']').val(value).trigger('change');
+		if(swatch_size_qv == 2){
+			if(name.indexOf('1') != -1){
+				$('#add-item-form-quickview #variant-swatch-1-quickview .swatch-element').find('input').prop('disabled', false);
+				$('#add-item-form-quickview #variant-swatch-2-quickview .swatch-element').find('input').prop('disabled', false);
+				$('#add-item-form-quickview #variant-swatch-1-quickview .swatch-element label').removeClass('sd');
+				$('#add-item-form-quickview #variant-swatch-1-quickview .swatch-element').removeClass('soldout');
+				$('#add-item-form-quickview .selector-wrapper .single-option-selector').eq(1).find('option').each(function(){
+					var _tam = $(this).val();
+					$(this).parent().val(_tam).trigger('change');
+					if(check_variant){
+						if(_available == '' ){
+							_available = _tam;
+						}
+					}
+					else{
+						$('#add-item-form-quickview #variant-swatch-1-quickview .swatch-element[data-value="'+_tam+'"]').addClass('soldout');
+						$('#add-item-form-quickview #variant-swatch-1-quickview .swatch-element[data-value="'+_tam+'"]').find('input').prop('disabled', true);
+					}
+				})
+				$('#add-item-form-quickview .selector-wrapper .single-option-selector').eq(1).val(_available).trigger('change');
+				$('#add-item-form-quickview #variant-swatch-1-quickview .swatch-element[data-value="'+_available+'"] label').addClass('sd');
+			}
+		}
+		else if (swatch_size_qv == 3){
+			var _count_op2 = $('#add-item-form-quickview #variant-swatch-1-quickview .swatch-element').length;
+			var _count_op3 = $('#add-item-form-quickview #variant-swatch-2-quickview .swatch-element').length;
+			if(name.indexOf('1') != -1){
+				$('#add-item-form-quickview #variant-swatch-1-quickview .swatch-element').find('input').prop('disabled', false);
+				$('#add-item-form-quickview #variant-swatch-2-quickview .swatch-element').find('input').prop('disabled', false);
+				$('#add-item-form-quickview #variant-swatch-1-quickview .swatch-element label').removeClass('sd');
+				$('#add-item-form-quickview #variant-swatch-1-quickview .swatch-element').removeClass('soldout');
+				$('#add-item-form-quickview #variant-swatch-2-quickview .swatch-element label').removeClass('sd');
+				$('#add-item-form-quickview #variant-swatch-2-quickview .swatch-element').removeClass('soldout');
+				var _avi_op1 = '';
+				var _avi_op2 = '';
+				$('#add-item-form-quickview #variant-swatch-1-quickview .swatch-element').each(function(ind,value){
+					var _key = $(this).data('value');
+					var _key2 = '';
+					var _unavi = 0;
+					$('#add-item-form-quickview .single-option-selector').eq(1).val(_key).change();
+					$('#add-item-form-quickview #variant-swatch-2-quickview .swatch-element label').removeClass('sd');
+					$('#add-item-form-quickview #variant-swatch-2-quickview .swatch-element').removeClass('soldout');
+					$('#add-item-form-quickview #variant-swatch-2-quickview .swatch-element').find('input').prop('disabled', false);
+					$('#add-item-form-quickview #variant-swatch-2-quickview .swatch-element').each(function(i,v){
+						var _val = $(this).data('value');
+						$('#add-item-form-quickview .single-option-selector').eq(2).val(_val).change();
+						if(check_variant == true){
+							if(_avi_op1 == ''){
+								_avi_op1 = _key;
+							}
+							if(_avi_op2 == ''){
+								_avi_op2 = _val;
+							}
+							//console.log(_avi_op1 + ' -- ' + _avi_op2)
+						}else{
+							_unavi += 1;
+						}
+					})
+					if(_unavi == _count_op3){
+						$('#add-item-form-quickview #variant-swatch-1-quickview .swatch-element[data-value = "'+_key+'"]').addClass('soldout');
+						$('#add-item-form-quickview #variant-swatch-1-quickview .swatch-element[data-value = "'+_key+'"] input').prop('disabled', true);	
+						$('#add-item-form-quickview #variant-swatch-2-quickview .swatch-element input').prop('disabled',true);
+
+						$('#add-item-form-quickview #variant-swatch-1-quickview .swatch-element').find('label').removeClass('sd');
+						$('#add-item-form-quickview #variant-swatch-2-quickview .swatch-element').find('label').removeClass('sd');
+						
+						$('#add-item-form-quickview #variant-swatch-1-quickview .swatch-element').addClass('soldout');
+						$('#add-item-form-quickview #variant-swatch-2-quickview .swatch-element').addClass('soldout');
+
+						/*	setTimeout(function(){
+							$('#add-item-form-quickview #variant-swatch-1-quickview .swatch-element[data-value = "'+_key+'"] input').attr('disabled','disabled');
+						})*/
+					}
+				})
+				$('#add-item-form-quickview #variant-swatch-1-quickview .swatch-element[data-value="'+_avi_op1+'"] input').click();
+			}
+			else if(name.indexOf('2') != -1){
+				$('#add-item-form-quickview #variant-swatch-2-quickview .swatch-element label').removeClass('sd');
+				$('#add-item-form-quickview #variant-swatch-2-quickview .swatch-element').removeClass('soldout');
+				$('#add-item-form-quickview #variant-swatch-2-quickview .swatch-element').find('input').prop('disabled', false);
+				$('#add-item-form-quickview .selector-wrapper .single-option-selector').eq(2).find('option').each(function(){
+
+					var _tam = $(this).val();
+					$(this).parent().val(_tam).trigger('change');
+					if(check_variant){
+						if(_available == '' ){
+							_available = _tam;
+						}
+					}
+					else{
+
+						$('#add-item-form-quickview #variant-swatch-2-quickview .swatch-element[data-value="'+_tam+'"]').addClass('soldout');
+						$('#add-item-form-quickview #variant-swatch-2-quickview .swatch-element[data-value="'+_tam+'"]').find('input').prop('disabled', true);
+					}
+				})
+				$('#add-item-form-quickview .selector-wrapper .single-option-selector').eq(2).val(_available).trigger('change');
+				$('#add-item-form-quickview #variant-swatch-2-quickview .swatch-element[data-value="'+_available+'"] label').addClass('sd');
+			}
+		}
+		else{
+		}
+
+		//	debugger;
+		if(vrIdParam){
+			if(current_id != selectedVariant.id){
+				selectedVariant.id = current_id;
+			}
+		}
+	})
+
+	$(document).ready(function(){
+		var _chage = '';	
+		if(current_id == selectedVariant.id){
+			$('#add-item-form-quickview .swatch-element[data-value="'+$('#add-item-form-quickview .selector-wrapper .single-option-selector').eq(0).val()+'"]').find('input').click();
+			if(swatch_size >= 2){
+				$('#add-item-form-quickview .swatch-element[data-value="'+$('#add-item-form-quickview .selector-wrapper .single-option-selector').eq(1).val()+'"]').find('input').click();
+			}
+		}
+		else{
+			$('#add-item-form-quickview .swatch-element[data-value="'+selectedVariant.option1+'"]').find('input').click();
+			if(swatch_size == 2){
+				$('#add-item-form-quickview .swatch-element[data-value="'+selectedVariant.option2+'"]').find('input').click();
+			}
+			if(swatch_size == 3){
+				$('#add-item-form-quickview .swatch-element[data-value="'+selectedVariant.option3+'"]').find('input').click();
+			}
+		}
+
+	});
+
+	$(document).ready(function(){
+		var vl = $('#add-item-form-quickview .swatch .color .sd').text();
+		$('#add-item-form-quickview .swatch .color input').parents(".swatch").find(".header strong").html(vl);
+
+		$("#add-item-form-quickview .select-swap .color" ).hover(function() { 
+			var value = $( this ).data("value");
+			$(this).parents(".swatch").find(".header strong").html( value );
+		},function(){
+			var value = $("#add-item-form-quickview .select-swap .color label.sd span").html();
+			$(this).parents(".swatch").find(".header strong").html( value );
+		});
+	});
+</script>
