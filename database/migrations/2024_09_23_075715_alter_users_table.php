@@ -15,7 +15,6 @@ return new class extends Migration
             $table->integer('role')->default(1)->after('email');
         });
     }
-
     /**
      * Reverse the migrations.
      */

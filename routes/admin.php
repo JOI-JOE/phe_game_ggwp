@@ -28,10 +28,11 @@ Route::group(['middleware' => 'admin.auth'], function () {
     Route::delete('type/{id}', [TypeController::class, 'destroy'])->name('type.destroy');
 
     // Product
-    Route::prefix('products')->group(function () {
+    Route::prefix('products')->name('product.')->group(function () {
         // Route::get('/', [ProductController::class, 'index'])->name('product.list');
-        Route::get('create', [ProductController::class, 'create'])->name('product.create');
-        Route::post('store', [ProductController::class, 'store'])->name('product.store');
+        Route::get('list', [ProductController::class, 'index'])->name('list');
+        Route::get('create', [ProductController::class, 'create'])->name('create');
+        Route::post('store', [ProductController::class, 'store'])->name('store');
     });
 
     Route::get('getSlug', function (Request $request) {

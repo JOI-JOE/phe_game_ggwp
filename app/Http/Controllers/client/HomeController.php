@@ -12,6 +12,7 @@ class HomeController extends Controller
     public function home()
     {
         $products = Product::all();
+        
         return view('client.index', compact('products'));
     }
 
@@ -59,8 +60,5 @@ class HomeController extends Controller
         return view('client.detail-product', compact('product', 'product_variant'));
     }
 
-    public function cart()
-    {
-        return view('client.buy-product.cart');
-    }
+    
 }

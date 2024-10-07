@@ -26,7 +26,10 @@
     <link rel="stylesheet" href="{{asset('dist/virtual-select.min.css')}}">
 
     <link href="https://unpkg.com/filepond@^4/dist/filepond.css" rel="stylesheet" />
-
+    <link
+    href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css"
+    rel="stylesheet"
+    />
     <meta name="csrf-token" content="{{csrf_token()}}">
 
 </head>
@@ -120,7 +123,6 @@
     <!-- Page level custom scripts -->
     <script src="{{asset('admin-site/js/demo/datatables-demo.js')}}"></script>
     <!-- Fild Pound -->
-    <script src="https://unpkg.com/filepond@^4/dist/filepond.js"></script>
     <script type="text/javascript">
         $.ajaxSetup({
             headers: {
@@ -145,6 +147,9 @@
             }
         });
     </script>
+    <script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.js"></script>
+    <script src="https://unpkg.com/filepond@^4/dist/filepond.js"></script>
+
     @yield('customeJS')
 </body>
 

@@ -5,14 +5,19 @@ namespace App\Http\Controllers\admin;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
+use App\Models\ProductImage;
 use App\Models\TemporaryFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver;
 
 class ProductController extends Controller
 {
-    public function index() {}
-
+    public function index()
+    {
+        return view('admin.product.index');
+    }
 
     public function show() {}
 
@@ -23,9 +28,9 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
+
         $rules = [
             'name' => 'required',
-            'description'  => 'required',
             'handle' => 'required|unique:products',
             'page_title' => 'required',
             'price' => 'required',
@@ -35,13 +40,9 @@ class ProductController extends Controller
         ];
 
         $validator = Validator::make($request->all(), $rules);
+
         $temporaryFiles = TemporaryFile::all();
-        // if($validator->fails()){
-        foreach ($temporaryFiles as $temporaryFile) {
-            Storage::deleteDirectory('images/tmp/' . $temporaryFile->folder);
-            $temporaryFile->delete();
-        }
-        // }
+
         if ($validator->passes()) {
 
             $product = new Product();
@@ -55,18 +56,35 @@ class ProductController extends Controller
             $product->not_allow_promotion = $request->not_allow_promotion;
             $product->save();
 
-            $temporaryFiles = TemporaryFile::all();
-            // if($validator->fails()){
-            // foreach ($temporaryFiles as $temporaryFile) {
-            //     Storage::deleteDirectory('images/tmp' . $temporaryFile->folder);
-            //     $temporaryFile->delete();
-            // }
-            // // }
+            if (!empty($request->feature_image)) {
+                foreach ($temporaryFiles as $temporaryFile) {
+
+                    $extArray = explode('.', $temporaryFile->file);
+
+                    $ext = last($extArray);
+                    $productImage = new ProductImage();
+                    $productImage->product_id = $product->id;
+                    $productImage->src = 'NULL';
+                    $productImage->save();
+
+                    $imageName = $product->id . '-' . $productImage->id . '-' . time() .  '.' . $ext;
+                    $productImage->src = $imageName;
+                    $productImage->save();
+
+                    Storage::copy('images/tmp' . '/' . $temporaryFile->folder . '/' . $temporaryFile->file, 'product' . '/' . $temporaryFile->file);
+                }
+            }
+
 
             return response()->json([
                 'status' => true
             ]);
         } else {
+
+            foreach ($temporaryFiles as $temporaryFile) {
+                Storage::deleteDirectory('images/tmp/' . $temporaryFile->folder);
+                $temporaryFile->delete();
+            }
 
             return response()->json([
                 'status' => false,
@@ -74,35 +92,6 @@ class ProductController extends Controller
                 'data'   =>  $request->all()
             ]);
         }
-        // // dd($request);
-        // // $tmp_file = TemporaryFile::where('folder', $request->feature_image)->first();
-
-        // // if ($tmp_file) {
-        // //     Storage::copy('posts/tmp/' . $tmp_file->folder . '/' . $tmp_file->file, 'posts/' . $tmp_file->file);
-
-        // //     // 'image' => $tmp_file->folder .  '/' . $tmp_file->file;
-        // //     Storage::deleteDirectory('posts/tmp/' . $tmp_file->folder);
-        // //     $tmp_file->delete();
-        // // }
-
-        // $temporaryFiles = TemporaryFile::all();
-        // // if($validator->fails()){
-        // foreach ($temporaryFiles as $temporaryFile) {
-        //     Storage::deleteDirectory('images/tmp' . $temporaryFile->folder);
-        //     $temporaryFile->delete();
-        // }
-        // // }
-
-        // // $product = Product::create(attributes: $validator->validated());
-
-        // foreach ($temporaryFiles as $temporaryFile) {
-        //     Storage::copy('images/tmp' . $temporaryFile->folder . '/' . $temporaryFile->file, 'images/' . $temporaryFile->folder . '/' . $temporaryFile->file);
-
-        //     // createa 
-
-        //     Storage::deleteDirectory('images/tmp/' . $temporaryFile->folder);
-        //     $temporaryFile->delete();
-        // }
     }
     public function tmpUpload(Request $request)
     {

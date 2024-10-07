@@ -16,7 +16,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        ProductVariant::factory(6)->create();
+        // ProductVariant::factory(6)->create();
 
         // User::factory()->create([
         //     'name' => 'Test User',

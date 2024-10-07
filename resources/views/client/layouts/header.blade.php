@@ -137,47 +137,40 @@
                                     d="M20.5 6.5a4.75 4.75 0 00-4.75 4.75v.56h-3.16l-.77 11.6a5 5 0 004.99 5.34h7.38a5 5 0 004.99-5.33l-.77-11.6h-3.16v-.57A4.75 4.75 0 0020.5 6.5zm3.75 5.31v-.56a3.75 3.75 0 10-7.5 0v.56h7.5zm-7.5 1h7.5v.56a3.75 3.75 0 11-7.5 0v-.56zm-1 0v.56a4.75 4.75 0 109.5 0v-.56h2.22l.71 10.67a4 4 0 01-3.99 4.27h-7.38a4 4 0 01-4-4.27l.72-10.67h2.22z"
                                 ></path>
                             </svg>
-                            <span class="hd-cart-count">5</span>
+                            <span id="total_cart" class="hd-cart-count">0</span>
                         </a>
                     </div>
                     <!-- Cart notification -->
                     <div id="cart-notification" class="hidden">
                         <div class="cart-notify-button">
                             <button type="button" class="btn-close">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    x="0px"
-                                    y="0px"
-                                    width="50"
-                                    height="50"
-                                    viewBox="0 0 50 50"
-                                >
-                                    <path
-                                        d="M 7.71875 6.28125 L 6.28125 7.71875 L 23.5625 25 L 6.28125 42.28125 L 7.71875 43.71875 L 25 26.4375 L 42.28125 43.71875 L 43.71875 42.28125 L 26.4375 25 L 43.71875 7.71875 L 42.28125 6.28125 L 25 23.5625 Z"
-                                    ></path>
+                                <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="50" height="50" viewBox="0 0 50 50">
+                                <path d="M 7.71875 6.28125 L 6.28125 7.71875 L 23.5625 25 L 6.28125 42.28125 L 7.71875 43.71875 L 25 26.4375 L 42.28125 43.71875 L 43.71875 42.28125 L 26.4375 25 L 43.71875 7.71875 L 42.28125 6.28125 L 25 23.5625 Z"></path>
                                 </svg>
                             </button>
                         </div>
-                        <div class="cart-notification"></div>
+                        <div class="cart-notification">
+                            <div class="row">
+                                <div class="col-md-12 col-xs-12">
+                                    <p class="jGowl-text">Đã thêm vào giỏ hàng thành công!</p>
+                                </div>
+                                <div class="col-md-4 col-xs-4">
+                                    <a href="/products/tap-chi-ggwp-so-01">
+                                        <img width="70px" src="//product.hstatic.net/200000249781/product/8_46e59d9aa2aa45c2a100c6182244dd59_small.jpg" alt="Tạp chí GGWP số 01">
+                                    </a>
+                                </div>
+                                <div class="col-md-8 col-xs-8">
+                                    <div class="jGrowl-note">
+                                        <a class="jGrowl-title" href="/products/tap-chi-ggwp-so-01">Tạp chí GGWP số 01</a>
+                                        <ins>139,000₫</ins>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <div class="list-btn">
-                            <a
-                                href="/cart"
-                                class="btn-cart view-cart"
-                                >Xem giỏ hàng (<span
-                                    class="hd-cart-count"
-                                    >5</span
-                                >)</a
-                            >
-                            <a
-                                href="/checkout"
-                                class="btn-cart check-out"
-                                >Thanh toán</a
-                            >
-                            <a
-                                href="/collections/all"
-                                class="continue-shopping"
-                                >Tiếp tục mua sắm</a
-                            >
+                            <a href="/cart" class="btn-cart view-cart">Xem giỏ hàng (<span class="hd-cart-count">6</span>)</a>
+                            <a href="/checkout" class="btn-cart check-out">Thanh toán</a>
+                            <a href="/collections/all" class="continue-shopping">Tiếp tục mua sắm</a>
                         </div>
                     </div>
                 </div>
@@ -258,3 +251,21 @@
     });
 </script>
 
+<script>
+    $(document).ready(function() {
+        $('.cart-notify-button button').click(function() {
+            $('#cart-notification').addClass('hidden'); // Add 'hidden' class
+        });
+        $.ajax({
+            url: '{{ route('getTotal') }}',
+            method: 'GET',
+            success: function(response) {
+                if (response['status']) {
+                    console.log('dữ liệu đã được chuẩn bị')
+                    console.log(response['data']);
+                    $('#total_cart').html(response['data']);
+                }
+            }
+        });
+    });
+</script>

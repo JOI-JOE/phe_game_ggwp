@@ -24,9 +24,10 @@
         <!--+++++++++++++ JS THEME ++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
         <link rel="stylesheet" href="{{asset('custom/custom.css')}}">
         <!-- JQuery -->
+        <meta name="csrf-token" content="{{csrf_token()}}">
+        
         <script src="{{asset('client-site/assets/vendors/jquery.min.js')}}"></script>
     </head>
-
     <body class="mainBody-theme mainBody-mbcart template-index">
         <div
             class="mainBody-theme-container mainBody-modalshow layoutProduct_scroll"
@@ -64,6 +65,13 @@
             $('.search-header-action').addClass('hidden');
             $(this).parents('.search-header-action').removeClass('js-is-field');
         })
+        </script>
+        <script type="text/javascript">
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content')
+                }
+            });
         </script>
 
         @yield('customJs')

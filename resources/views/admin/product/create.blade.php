@@ -1,4 +1,4 @@
-@section('title', 'Create New Type') 
+@section('title', 'Create New Product') 
 
 @extends('admin.layouts.app')
 
@@ -18,18 +18,21 @@
                         <label for="name">Name:</label>
                         <input type="text" class="form-control form-control-user" name="name" id="name" >
                         <p></p>
+                       
                     </div>
 
                     <div class="col-sm-6 mb-3 mb-sm-0">
                         <label for="handle">Handle:</label>
                         <input type="text" class="form-control form-control-user" name="handle" id="handle" >
                         <p></p>
+                        
                     </div>
 
                     <div class="col-sm-6 mb-3 mb-sm-0">
                         <label for="page_title">Page_Title:</label>
                         <input type="text" class="form-control form-control-user" name="page_title" id="page_title" >
                         <p></p>
+                        
                     </div>
 
                     <div class="col-sm-6 mb-3 mb-sm-0">
@@ -41,7 +44,7 @@
                     <div class="col-sm-6  mb-3">
                         <label for="price">Price:</label>
                         <input type="number" min="0" class="form-control form-control-user" name="price" id="price" autocomplete="off">
-
+                        <p></p>
                     </div>
                 
                     <div class="col-sm-6 mb-3 mb-sm-0 mt-3">
@@ -73,13 +76,12 @@
 
                 <div class="row">
                     <div class="col-lg-6">
-                        <label for="">Upload Image</label>
                         <input type="file" 
-                        name="feature_image" 
-                        multiple 
-                        data-allow-reorder="true"
-                        data-max-file-size="3MB"
-                        data-max-files="6">
+                            class="feature_image"
+                            name="feature_image"
+                            multiple
+                            data-max-file-size="3MB"
+                            data-max-files="7" />
                     </div>
 
                     <div class="wrapper col-lg-6">
@@ -87,7 +89,7 @@
                         <textarea spellcheck="false" name="description" id="description" placeholder="Type something here..."></textarea>
                     </div>
                 </div>
-                <button type="submit" class="btn btn-primary btn-user btn-block">Create Type</button>
+                <button type="submit" class="btn btn-primary btn-user btn-block">Create product</button>
             </form>
         </div>
 	</div>
@@ -105,18 +107,21 @@ VirtualSelect.init({
 </script>
 {{-- Upload file  --}}
 <script>
-        const inputElement = document.querySelector('input[type="file"]');
-        const pond = FilePond.create(inputElement);
-
-        FilePond.setOptions({
-            server: {
-                process: '{{ route('upload_image') }}',
-                revert: '{{route('delete_image')}}',
-                headers: {
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                }
+    
+    FilePond.registerPlugin(FilePondPluginImagePreview);
+    const inputElement = document.querySelector('input[type="file"]');
+    const pond = FilePond.create(inputElement);
+    FilePond.setOptions({
+        server: {
+            process: '{{ route('upload_image') }}',
+            revert: '{{route('delete_image')}}',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
             }
-        });
+        }
+    });
+
+
 </script>
 
 <script>
@@ -130,9 +135,6 @@ VirtualSelect.init({
 
 <script>
 $(document).ready(function() {
-
-    // Tag
-
 
     $('#name').change(function (){
         element = $(this);
@@ -176,36 +178,56 @@ $(document).ready(function() {
             data: element.serializeArray(),
             dataType: 'json',
             success: function (response) {
-                // $("button[type=submit]").prop('disabled',false);
-                // if(response['status'] == true){
-                //     $('#nameType').removeClass('is-invalid').siblings('p').removeClass('invalid-feedback').html("");
-                //     $('#slugType').removeClass('is-invalid').siblings('p').removeClass('invalid-feedback').html("");
-                //     console.log(response);
+                 $("button[type=submit]").prop('disabled',false);
+                 if(response['status'] == true){
+                     $('#nameType').removeClass('is-invalid').siblings('p').removeClass('invalid-feedback').html("");
+                     $('#slugType').removeClass('is-invalid').siblings('p').removeClass('invalid-feedback').html("");
+                     console.log(response);
                     
-                //     toastMixin.fire({
-                //         title: 'Add Type Success',
-                //         icon: 'success'
-                //     });
+                    //  toastMixin.fire({
+                    //      title: 'Add Type Success',
+                    //      icon: 'success'
+                    //  });
 
-                //     window.location.href="{{route('admin.type')}}"
-                // }else{
-                //     var errors = response['errors']
-                //     if(errors['name']){
-                //         $('#nameType').addClass('is-invalid').siblings('p').addClass('invalid-feedback').html(errors['name']);
-                //     }else{
-                //         $('#nameType').removeClass('is-invalid').siblings('p').removeClass('invalid-feedback').html("");
-                //     }
+                    //  window.location.href="{{route('admin.type')}}"
+                 }else{
+                     var errors = response['errors']
+                     if(errors['name']){
+                         $('#name').addClass('is-invalid').siblings('p').addClass('invalid-feedback').html(errors['name']);
+                     }else{
+                         $('#name').removeClass('is-invalid').siblings('p').removeClass('invalid-feedback').html("");
+                     }
 
-                //     if(errors['slug']){
-                //         $('#slugType ').addClass('is-invalid').siblings('p').addClass('invalid-feedback').html(errors['slug']);
-                //     }else{
-                //         $('#slugType').removeClass('is-invalid').siblings('p').removeClass('invalid-feedback').html("");
-                //     }
-                //     toastMixin.fire({
-                //             title: `Error`,
-                //             icon: 'error'
-                //     });
-                // }
+                     if(errors['handle']){
+                         $('#handle ').addClass('is-invalid').siblings('p').addClass('invalid-feedback').html(errors['handle']);
+                     }else{
+                         $('#handle').removeClass('is-invalid').siblings('p').removeClass('invalid-feedback').html("");
+                     }
+
+                     if(errors['page_title']){
+                         $('#page_title ').addClass('is-invalid').siblings('p').addClass('invalid-feedback').html(errors['page_title']);
+                     }else{
+                         $('#page_title').removeClass('is-invalid').siblings('p').removeClass('invalid-feedback').html("");
+                     }
+
+
+                     if(errors['published_at']){
+                         $('#published_at ').addClass('is-invalid').siblings('p').addClass('invalid-feedback').html(errors['published_at']);
+                     }else{
+                         $('#published_at').removeClass('is-invalid').siblings('p').removeClass('invalid-feedback').html("");
+                     }
+
+                     if(errors['price']){
+                         $('#price ').addClass('is-invalid').siblings('p').addClass('invalid-feedback').html(errors['price']);
+                     }else{
+                         $('#price').removeClass('is-invalid').siblings('p').removeClass('invalid-feedback').html("");
+                     }
+
+                    //  toastMixin.fire({
+                    //          title: `Error`,
+                    //          icon: 'error'
+                    //  });
+                 }
                 console.log(response['data'])
             }
         })
