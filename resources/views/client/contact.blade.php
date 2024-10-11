@@ -1,3 +1,5 @@
+@section('title', 'Liên hệ')
+
 @extends('client.layouts.app')
 
 @section('content')

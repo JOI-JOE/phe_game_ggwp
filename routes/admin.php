@@ -4,8 +4,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\admin\AdminDashboard;
 use App\Http\Controllers\admin\AdminLoginController;
 use App\Http\Controllers\admin\ProductController;
-use App\Http\Controllers\admin\TemporaryController;
 use App\Http\Controllers\admin\TypeController;
+use App\Http\Controllers\admin\UserController;
+use App\Http\Controllers\admin\VariantController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -32,8 +33,33 @@ Route::group(['middleware' => 'admin.auth'], function () {
         // Route::get('/', [ProductController::class, 'index'])->name('product.list');
         Route::get('list', [ProductController::class, 'index'])->name('list');
         Route::get('create', [ProductController::class, 'create'])->name('create');
+        Route::get('{id}', [ProductController::class, 'show'])->name('show');
+        Route::delete('{id}', [ProductController::class, 'destroy'])->name('destroy');
+        Route::get('edit/{id}', [ProductController::class, 'edit'])->name('edit');
+        Route::put('update/{id}', [ProductController::class, 'update'])->name('update');
         Route::post('store', [ProductController::class, 'store'])->name('store');
     });
+
+    Route::prefix('variants')->name('variant.')->group(function () {
+        Route::get('list', [VariantController::class, 'index'])->name('list');
+        Route::get('create', [VariantController::class, 'create'])->name('create');
+        // Route::get('{id}', [ProductController::class, 'show'])->name('show');
+        // Route::delete('{id}', [ProductController::class, 'destroy'])->name('destroy');
+        // Route::get('edit/{id}', [ProductController::class, 'edit'])->name('edit');
+        // Route::put('update/{id}', [ProductController::class, 'update'])->name('update');
+        // Route::post('store', [ProductController::cnlass, 'store'])->name('store');
+    });
+
+    Route::prefix('user')->name('user.')->group(function () {
+        Route::get('list', [UserController::class, 'index'])->name('index');
+        Route::get('create', [UserController::class, 'create'])->name('create');
+        Route::get('edit/{id}', [UserController::class, 'edit'])->name('edit');
+        Route::put('update/{id}', [UserController::class, 'update'])->name('update');
+        // Route::get('{id}', [ProductController::class, 'show'])->name('show');
+        // Route::delete('{id}', [ProductController::class, 'destroy'])->name('destroy');
+        // Route::post('store', [ProductController::cnlass, 'store'])->name('store');
+    });
+
 
     Route::get('getSlug', function (Request $request) {
         $handle = '';

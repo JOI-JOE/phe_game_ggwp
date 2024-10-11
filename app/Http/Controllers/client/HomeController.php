@@ -6,13 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\ProductVariant;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
     public function home()
     {
         $products = Product::all();
-        
+        // dump(Auth::user());
         return view('client.index', compact('products'));
     }
 
@@ -53,7 +54,6 @@ class HomeController extends Controller
 
     public function detail_product($handle)
     {
-
         $product = Product::where('handle', $handle)->first();
         $product_variant = ProductVariant::where('product_id', $product->id)->get();
         // dump($product, $product_variant);

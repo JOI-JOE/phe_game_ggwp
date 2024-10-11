@@ -9,17 +9,22 @@ use App\Models\ProductImage;
 use App\Models\TemporaryFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
-use Intervention\Image\ImageManager;
-use Intervention\Image\Drivers\Gd\Driver;
+
 
 class ProductController extends Controller
 {
     public function index()
     {
-        return view('admin.product.index');
+        $products = Product::with('product_images')->get();
+
+        return view('admin.product.index', compact('products'));
     }
 
-    public function show() {}
+    public function show($id)
+    {
+        $product = Product::query()->findOrFail($id);
+        return $product;
+    }
 
     public function create()
     {
@@ -70,8 +75,10 @@ class ProductController extends Controller
                     $imageName = $product->id . '-' . $productImage->id . '-' . time() .  '.' . $ext;
                     $productImage->src = $imageName;
                     $productImage->save();
+                    Storage::copy('images/tmp' . '/' . $temporaryFile->folder . '/' . $temporaryFile->file, 'product' . '/' . $imageName);
 
-                    Storage::copy('images/tmp' . '/' . $temporaryFile->folder . '/' . $temporaryFile->file, 'product' . '/' . $temporaryFile->file);
+                    Storage::deleteDirectory('images/tmp/' . $temporaryFile->folder);
+                    $temporaryFile->delete();
                 }
             }
 
@@ -93,6 +100,122 @@ class ProductController extends Controller
             ]);
         }
     }
+
+    public function edit($id)
+    {
+        $product = Product::find($id);
+        $product_images = ProductImage::where('product_id', $product->id)->get();
+        return view('admin.product.edit', compact('product', 'product_images'));
+    }
+
+    public function update(Request $request, $id)
+    {
+
+        $product = Product::query()->findOrFail($id);
+
+        $rules = [
+            'name' => 'required',
+            'handle' => 'required',
+            'page_title' => 'required',
+            'price' => 'required',
+            'type_id' => 'required|exists:types,id',
+            'published_at' => 'required',
+            'not_allow_promotion' => 'in:0,1',
+        ];
+
+        $temporaryFiles = TemporaryFile::all();
+
+        $validator = Validator::make($request->all(), $rules);
+
+
+        if ($validator->passes()) {
+
+            $product->name = $request->name;
+            $product->description = $request->description;
+            $product->handle = $request->handle;
+            $product->page_title = $request->page_title;
+            $product->price = $request->price;
+            $product->type_id = $request->type_id;
+            $product->published_at = $request->published_at;
+            $product->not_allow_promotion = $request->not_allow_promotion;
+            $product->save();
+
+            $old_images  = ProductImage::where('product_id', $product->id)->get();
+            if (!empty($request->feature_image)) {
+
+
+                foreach ($temporaryFiles as $temporaryFile) {
+
+                    $extArray = explode('.', $temporaryFile->file);
+
+                    $ext = last($extArray);
+                    $productImage = new ProductImage();
+                    $productImage->product_id = $product->id;
+                    $productImage->src = 'NULL';
+                    $productImage->save();
+
+                    $imageName = $product->id . '-' . $productImage->id . '-' . time() .  '.' . $ext;
+
+                    $productImage->src = $imageName;
+                    $productImage->save();
+                    Storage::copy('images/tmp' . '/' . $temporaryFile->folder . '/' . $temporaryFile->file, 'product' . '/' . $imageName);
+
+                    Storage::deleteDirectory('images/tmp/' . $temporaryFile->folder);
+                    $temporaryFile->delete();
+                }
+
+                if ($old_images) {
+                    foreach ($old_images as $image) {
+                        $image->delete();
+                    }
+                }
+            }
+
+
+            return response()->json([
+                'status' => true
+            ]);
+        } else {
+            $temporaryFiles = TemporaryFile::all();
+            foreach ($temporaryFiles as $temporaryFile) {
+                Storage::deleteDirectory('images/tmp/' . $temporaryFile->folder);
+                $temporaryFile->delete();
+            }
+
+            return response()->json([
+                'status' => false,
+                'errors' => $validator->errors(),
+                'data'   =>  $request->all()
+            ]);
+        }
+    }
+
+    public function destroy($id)
+    {
+        $product = Product::find($id);
+        $productImage = ProductImage::where('product__id', $product->id);
+
+        if (empty($product)) {
+            return response()->json([
+                'status' => false,
+                'message' => 'product not found'
+            ]);
+        }
+        $product->delete();
+        if ($productImage) {
+            foreach ($productImage as $image) {
+                $image->delete();
+            }
+        }
+
+        return response()->json([
+            'status' => true,
+            'message' => 'product deleted successfully',
+        ]);
+    }
+
+
+
     public function tmpUpload(Request $request)
     {
         if ($request->hasFile('feature_image')) {

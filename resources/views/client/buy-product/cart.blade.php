@@ -1,3 +1,5 @@
+@section('title', 'Giỏ hàng của bạn')
+
 @extends('client.layouts.app')
 
 @section('content')

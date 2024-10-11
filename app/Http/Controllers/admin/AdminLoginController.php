@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Auth\Events\Attempting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -17,7 +18,6 @@ class AdminLoginController extends Controller
 
     public function authenticate(Request $request)
     {
-
 
         $validator = Validator::make($request->all(), [
             'email' => 'required|email',

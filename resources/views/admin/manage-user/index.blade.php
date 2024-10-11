@@ -1,4 +1,4 @@
-@section('title', 'List Of Types')
+@section('title', 'List Of Users')
 
 @extends('admin.layouts.app')
 
@@ -9,8 +9,7 @@
 		<!-- DataTales Example -->
 		<div class="card shadow mb-4">
 			<div class="card-header py-3" style="display: flex; justify-content: space-between; align-items: center">
-				<h1 class="m-0 font-weight-bold text-primary">List Of Product</h1>
-				<a href="{{route('product.create')}}" class="btn btn-success btn-lg" >ADD NEW</a>
+				<h1 class="m-0 font-weight-bold text-primary">List Of Users</h1>
 			</div>
 			<div class="card-body">
 				<div class="table-responsive">
@@ -19,10 +18,10 @@
 							<tr>
 								<th>ID</th>
 								<th>Name</th>
-								<th>Image</th>
-								<th>Handle</th>
-								<th>Price</th>
-								<th>Status</th>
+								<th>Email</th>
+								<th>Role</th>
+								<th>Avatar</th>
+								<th>Active</th>
 								<th></th>
 							</tr>
 						</thead>
@@ -30,31 +29,33 @@
 							<tr>
 								<th>ID</th>
 								<th>Name</th>
-								<th>Image</th>
-								<th>Handle</th>
-								<th>Price</th>
-								<th>Status</th>
+								<th>Email</th>
+								<th>Role</th>
+								<th>Avatar</th>
+								<th>Active</th>
 								<th></th>
 							</tr>
 						</tfoot>
 						<tbody>
-							@foreach ($products as $item)
+							@foreach ($data as $item)
 							<tr>
-							@php
-                                $productImage = $item->product_images->first();
-							@endphp
 								<td class="product_id">{{$item->id}}</td>
-                                <td><a href="" class="btn btn-infor btn-sm view_data" style="background: blanchedalmond">{{$item->name}}</a></td>n
-								@if ($productImage)
+                                <td><a href="" class="btn btn-infor btn-sm view_data" style="background: blanchedalmond">{{$item->name}}</a></td>
+								<td>{{ $item->email }}</td>
+								@if ($item->role == 2)
+									<td><p class="btn btn-infor btn-sm view_data" style="background: rgb(13, 188, 251)">Admin</p></td>
+								@else
+									<td><p class="btn btn-infor btn-sm view_data" style="background: rgb(34, 196, 255)">User</p></td>
+								@endif
+
+								@if ($item->avatar)
                                 	<td><img src="{{ Storage::url('product/' . $productImage->src) }}" alt="{{ $item->name }}" width="100"></td>
 								@else
                                 	<td><small>No Photo</small></td>
 								@endif
-								<td>{{ $item->handle }}</td>
-								<td>{{ $item->price }}</td>
 								
 								<td class="text-center">
-									@if ($item->not_allow_promotion == 1)
+									@if ($item->active == 1)
 										<a href="#" class="btn btn-success btn-circle btn-sm">
 											<i class="fas fa-check"></i>
 										</a>
@@ -70,8 +71,7 @@
                                             ...
                                         </button>
                                         <div class="dropdown-menu animated--fade-in" aria-labelledby="dropdownMenuButton" style="">
-											<a class="dropdown-item" href="{{route('product.edit',$item->id)}}">Edit</a>
-											<a href="#" class="dropdown-item" id="btn-delete" onclick="deleteData({{$item->id}})">Delete</a>
+											<a class="dropdown-item" href="{{route('user.edit',$item->id)}}">Edit</a>
                                         </div>
                                     </div>
 								</td>
@@ -90,9 +90,11 @@
 		<div class="modal-content">
 			<div class="modal-header">
 			<h5 class="modal-title" id="bookModalLabel">Detail Books </h5>
+			{{-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> --}}
 			</div>
 			<div class="modal-body">
 			<div class="view_book_data">
+
 			</div>
 			</div>
 		</div>
@@ -102,34 +104,6 @@
 
 @section('customeJS')
 <script>
-		function deleteData(id){
-			var url = '{{route("product.destroy","ID")}}';
-			// Test
-			var newUrl = url.replace("ID",id);
-			if(confirm("Are you sure you want to delete")) {
-				$.ajax({
-					url: newUrl,
-					type: 'delete',
-					data: {},
-					dataType: 'json',
-					headers: {
-					'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content')
-					},
-					success: function (response) {
-						if (response['status']) {
-							
-							toastMixin.fire({
-								title: 'Delete Success',
-								icon: 'success'
-                        	});
-							setTimeout(() => {
-								window.location.href = "{{route('product.list')}}";
-							}, 1000);
-						}
-					}
-				})
-			}
-    	}
 	$(document).ready(function() {
 		// Delete
 		$('.view_data').click(function(e) {
@@ -160,6 +134,4 @@
 		})
 	});
 </script>
-
-
 @endsection

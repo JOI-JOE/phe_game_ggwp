@@ -64,7 +64,7 @@
 
                     <div class="form-group ">
                         <div class=" p-2 ">
-                            <label for="">Not Allow Promotion:</label>
+                            <label for="">Status:</label>
                             <input type="hidden" name="not_allow_promotion" id="typeStatus" value="0">
                             <button type="button" class="btn btn-secondary btn-toggle" id="btn-toggle-status" data-toggle="button" aria-pressed="false" autocomplete="off">
                               <div class="handle"></div>
@@ -83,13 +83,13 @@
                             data-max-file-size="3MB"
                             data-max-files="7" />
                     </div>
-
-                    <div class="wrapper col-lg-6">
-                        <label for="description">Description:</label>
-                        <textarea spellcheck="false" name="description" id="description" placeholder="Type something here..."></textarea>
-                    </div>
                 </div>
-                <button type="submit" class="btn btn-primary btn-user btn-block">Create product</button>
+                <div class="wrapper">
+                    <label for="description">Description:</label>
+                    <textarea spellcheck="false" name="description" id="description" placeholder="Type something here..."></textarea>
+                    <p style="color: red"></p>
+                </div>
+                <button type="submit" class="btn btn-primary btn-user btn-block mt-4">Create product</button>
             </form>
         </div>
 	</div>
@@ -184,12 +184,12 @@ $(document).ready(function() {
                      $('#slugType').removeClass('is-invalid').siblings('p').removeClass('invalid-feedback').html("");
                      console.log(response);
                     
-                    //  toastMixin.fire({
-                    //      title: 'Add Type Success',
-                    //      icon: 'success'
-                    //  });
+                     toastMixin.fire({
+                         title: 'Add Product Success',
+                         icon: 'success'
+                     });
 
-                    //  window.location.href="{{route('admin.type')}}"
+                     window.location.href="{{route('product.list')}}"
                  }else{
                      var errors = response['errors']
                      if(errors['name']){
@@ -223,6 +223,11 @@ $(document).ready(function() {
                          $('#price').removeClass('is-invalid').siblings('p').removeClass('invalid-feedback').html("");
                      }
 
+                     if(errors['description']){
+                         $('#description ').siblings('p').html(errors['description']);
+                     }else{
+                         $('#description').siblings('p').html("");
+                     }
                     //  toastMixin.fire({
                     //          title: `Error`,
                     //          icon: 'error'

@@ -1,53 +1,49 @@
-@section('title', 'Update Product')
+@section('title', 'Create User') 
 
 @extends('admin.layouts.app')
 
 @section('content')
 	<div class="container-fluid">
 		<!-- DataTales Example -->
-
-
 		<div class="card shadow mb-4">
 			<div class="card-header py-3">
-				<h1 class="m-0 font-weight-bold text-primary">Update Product</h1>
+				<h1 class="m-0 font-weight-bold text-primary">Create New Product</h1>
 			</div>
 		</div>
-       
-
         <div class="p-2">
             <form  action="" id="productForm" method="POST">
                 @csrf
                 <div class="form-group row">
                     <div class="col-sm-6 mb-3 mb-sm-0">
                         <label for="name">Name:</label>
-                        <input type="text" class="form-control form-control-user" name="name" id="name" value="{{ $product->name }}" >
+                        <input type="text" class="form-control form-control-user" name="name" id="name" >
                         <p></p>
                        
                     </div>
 
                     <div class="col-sm-6 mb-3 mb-sm-0">
                         <label for="handle">Handle:</label>
-                        <input type="text" class="form-control form-control-user" name="handle" id="handle" value="{{$product->handle}}" >
+                        <input type="text" class="form-control form-control-user" name="handle" id="handle" >
                         <p></p>
                         
                     </div>
 
                     <div class="col-sm-6 mb-3 mb-sm-0">
                         <label for="page_title">Page_Title:</label>
-                        <input type="text" class="form-control form-control-user" name="page_title" id="page_title" value="{{$product->page_title}}">
+                        <input type="text" class="form-control form-control-user" name="page_title" id="page_title" >
                         <p></p>
                         
                     </div>
 
                     <div class="col-sm-6 mb-3 mb-sm-0">
                         <label for="published_at">Published_at:</label>
-                        <input type="text" class="form-control form-control-user" name="published_at" id="published_at" value="{{$product->published_at}}">
+                        <input type="text" class="form-control form-control-user" name="published_at" id="published_at" autocomplete="off">
                         <p></p>
                     </div>
 
                     <div class="col-sm-6  mb-3">
                         <label for="price">Price:</label>
-                        <input type="number" min="0" class="form-control form-control-user" name="price" id="price" autocomplete="off" value="{{$product->price}}">
+                        <input type="number" min="0" class="form-control form-control-user" name="price" id="price" autocomplete="off">
                         <p></p>
                     </div>
                 
@@ -59,9 +55,7 @@
                             data-search="false" data-silent-initial-value-set="true">
                             @if($types->isNotEmpty())
                                 @foreach($types as $type)
-                                    <option 
-                                    {{ $product->type_id == $type->id ? 'selected' : '' }}
-                                     value="{{$type->id}}">{{$type->name}}</option>
+                                    <option value="{{$type->id}}">{{$type->name}}</option>
                                 @endforeach
                                     <option value="">Khác</option>
                             @endif
@@ -70,14 +64,13 @@
 
                     <div class="form-group ">
                         <div class=" p-2 ">
-                            <label for="">Status:</label>
-                            <input type="hidden" name="not_allow_promotion" id="typeStatus" value="{{ $product->not_allow_promotion }}" >
-                            <button type="button" class="btn btn-secondary btn-toggle" id="btn-toggle-status" data-toggle="button" aria-pressed="{{ $product->not_allow_promotion == 1 ? 'true' : 'false' }}" 
-                            {{ $product->not_allow_promotion == 1 ? 'autocomplete="on"' : 'autocomplete="off"' }}>
+                            <label for="">Not Allow Promotion:</label>
+                            <input type="hidden" name="not_allow_promotion" id="typeStatus" value="0">
+                            <button type="button" class="btn btn-secondary btn-toggle" id="btn-toggle-status" data-toggle="button" aria-pressed="false" autocomplete="off">
                               <div class="handle"></div>
                             </button>
                         </div>
-                    </div>  
+                    </div>
                 </div>
               
 
@@ -91,26 +84,18 @@
                             data-max-files="7" />
                     </div>
 
-                    <div class="col-lg-6">
-                        @if ($product_images)
-                            @foreach ($product_images as $image)
-                                <img src="{{ Storage::url('product/' . $image->src) }}" alt="{{ $product->name }}" width="200" class="m-1">
-                            @endforeach
-                        @endif
-                    </div>
                 </div>
-
                 <div class="wrapper">
                     <label for="description">Description:</label>
-                    <textarea spellcheck="false" name="description" id="description" placeholder="Type something here...">{{ $product->description }}</textarea>
+                    <textarea spellcheck="false" name="description" id="description" placeholder="Type something here..."></textarea>
+                    <p style="color: red"></p>
                 </div>
-                <button type="submit" class="btn btn-primary btn-user btn-block mt-4">Update product</button>
+                <button type="submit" class="btn btn-primary btn-user btn-block mt-4">Create product</button>
             </form>
         </div>
 	</div>
 
 @endsection
-
 
 @section('customeJS')
 {{-- Select --}}
@@ -121,8 +106,9 @@ VirtualSelect.init({
     showOptionsOnlyOnSearch: true,
 });
 </script>
-
+{{-- Upload file  --}}
 <script>
+    
     FilePond.registerPlugin(FilePondPluginImagePreview);
     const inputElement = document.querySelector('input[type="file"]');
     const pond = FilePond.create(inputElement);
@@ -135,6 +121,8 @@ VirtualSelect.init({
             }
         }
     });
+
+
 </script>
 
 <script>
@@ -186,8 +174,8 @@ $(document).ready(function() {
         var element = $(this);
         $("button[type=submit]").prop('disabled',true);
         $.ajax({
-            url: '{{ route('product.update',$product->id) }}', // Replace with your route
-            type: 'PUT',
+            url: '{{ route('product.store') }}', // Replace with your route
+            type: 'POST',
             data: element.serializeArray(),
             dataType: 'json',
             success: function (response) {
@@ -198,11 +186,11 @@ $(document).ready(function() {
                      console.log(response);
                     
                      toastMixin.fire({
-                         title: 'Update Type Success',
+                         title: 'Add Product Success',
                          icon: 'success'
                      });
 
-                     window.location.href="{{route('product.list')}}";
+                     window.location.href="{{route('product.list')}}"
                  }else{
                      var errors = response['errors']
                      if(errors['name']){
@@ -241,10 +229,10 @@ $(document).ready(function() {
                      }else{
                          $('#description').siblings('p').html("");
                      }
-                     toastMixin.fire({
-                             title: `Error`,
-                             icon: 'error'
-                     });
+                    //  toastMixin.fire({
+                    //          title: `Error`,
+                    //          icon: 'error'
+                    //  });
                  }
                 console.log(response['data'])
             }
