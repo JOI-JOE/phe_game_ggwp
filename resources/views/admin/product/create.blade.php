@@ -81,7 +81,7 @@
                             name="feature_image"
                             multiple
                             data-max-file-size="3MB"
-                            data-max-files="7" />
+                            data-max-files="1" />
                     </div>
                 </div>
                 <div class="wrapper">

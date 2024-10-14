@@ -49,7 +49,7 @@
 								@endif
 
 								@if ($item->avatar)
-                                	<td><img src="{{ Storage::url('product/' . $productImage->src) }}" alt="{{ $item->name }}" width="100"></td>
+                                	<td><img src="{{ Storage::url($item->avatar) }}" alt="{{ $item->name }}" width="100"></td>
 								@else
                                 	<td><small>No Photo</small></td>
 								@endif

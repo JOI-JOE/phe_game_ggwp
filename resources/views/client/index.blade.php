@@ -50,6 +50,9 @@
         <div class="container">
             <div class="row listProduct-row listProduct-filter">
                 @foreach ($products as $product)
+                @php
+                    $productImage = $product->product_images->first();
+				@endphp
                     <div
                         class="col-md-3 col-6 product-loop"
                         data-id="{{$product->id}}"
@@ -64,12 +67,12 @@
                                     class="gift product_gift_label d-none"
                                     data-id="1055345396"
                                 >
-                                    <img
+                                    {{-- <img
                                         class="lazyload"
                                         data-src="https://file.hstatic.net/200000593853/file/gift-filled_774ac33d774c4a29aa86ed5620d5b902.png"
                                         src="https://file.hstatic.net/200000593853/file/gift-filled_774ac33d774c4a29aa86ed5620d5b902.png"
                                         alt="icon quà tặng"
-                                    />
+                                    /> --}}
                                 </div>
 
                                 <div class="product--image">
@@ -77,10 +80,10 @@
                                         href="{{route('detai_product',$product->handle)}}"
                                     >
                                         <div
-                                            class="lazy-img first-image"
+                                            class="first-image"
                                         >
-                                            <picture>
-                                                <source
+                                            {{-- <picture> --}}
+                                                {{-- <source
                                                     media="(max-width: 480px)"
                                                     data-srcset="{{asset('client-site/img/Product/8_46e59d9aa2aa45c2a100c6182244dd59_medium.jpg')}}"
                                                     srcset="
@@ -91,36 +94,18 @@
                                                     media="(min-width: 481px)"
                                                     data-srcset="{{asset('client-site/img//Product/8_46e59d9aa2aa45c2a100c6182244dd59_large.jpg')}}"
                                                     srcset="{{asset('client-site/img//Product/8_46e59d9aa2aa45c2a100c6182244dd59_large.jpg')}}"
-                                                />
-                                                <img
+                                                /> --}}
+                                                @if ($productImage)
+                                                    <img
                                                     class="img-loop lazyloaded"
-                                                    data-src="{{asset('client-site/img/Product/10_3266eae8fa7d49e1a17fcb3f224508f1_small.jpg')}}"
-                                                    src="{{asset('client-site/img/Product/10_3266eae8fa7d49e1a17fcb3f224508f1_small.jpg')}}"
+                                                    data-src="{{ Storage::url('product/' . $productImage->src) }}"
+                                                    src="{{ Storage::url('product/' . $productImage->src) }}"
                                                     alt=" Tạp chí GGWP số 01 "
                                                 />
-                                            </picture>
-                                        </div>
-                                        <div
-                                            class="lazy-img second-image hovered-img"
-                                        >
-                                            <picture>
-                                                <source
-                                                    media="(min-width: 481px) and (max-width:767px)"
-                                                    data-srcset="{{asset('client-site/img/Product/10_3266eae8fa7d49e1a17fcb3f224508f1_medium.jpg')}}"
-                                                    srcset="{{asset('client-site/img/Product/10_3266eae8fa7d49e1a17fcb3f224508f1_medium.jpg')}}"
-                                                />
-                                                <source
-                                                    media="(min-width:768px)"
-                                                    data-srcset="{{asset('client-site/img/Product/10_3266eae8fa7d49e1a17fcb3f224508f1_large.jpg')}}"
-                                                    srcset="{{asset('client-site/img/Product/10_3266eae8fa7d49e1a17fcb3f224508f1_large.jpg')}}"
-                                                />
-                                                <img
-                                                    class="img-loop lazyloaded"
-                                                    data-src="{{asset('client-site/img/Product/10_3266eae8fa7d49e1a17fcb3f224508f1_small.jpg')}}"
-                                                    src="{{asset('client-site/img/Product/10_3266eae8fa7d49e1a17fcb3f224508f1_small.jpg')}}"
-                                                    alt=" Tạp chí GGWP số 01 "
-                                                />
-                                            </picture>
+                                                @else
+                                                    No Photo
+                                                @endif
+                                            {{-- </picture> --}}
                                         </div>
                                     </a>
                                 </div>

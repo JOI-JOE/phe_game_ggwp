@@ -46,7 +46,6 @@ class ProductController extends Controller
 
         $validator = Validator::make($request->all(), $rules);
 
-        $temporaryFiles = TemporaryFile::all();
 
         if ($validator->passes()) {
 
@@ -59,35 +58,35 @@ class ProductController extends Controller
             $product->type_id = $request->type_id;
             $product->published_at = $request->published_at;
             $product->not_allow_promotion = $request->not_allow_promotion;
-            $product->save();
+            // $product->save();
 
-            if (!empty($request->feature_image)) {
-                foreach ($temporaryFiles as $temporaryFile) {
 
-                    $extArray = explode('.', $temporaryFile->file);
 
-                    $ext = last($extArray);
-                    $productImage = new ProductImage();
-                    $productImage->product_id = $product->id;
-                    $productImage->src = 'NULL';
-                    $productImage->save();
+            if ($request->feature_image) {
+                $temporaryFile = TemporaryFile::all()->first();
 
-                    $imageName = $product->id . '-' . $productImage->id . '-' . time() .  '.' . $ext;
-                    $productImage->src = $imageName;
-                    $productImage->save();
-                    Storage::copy('images/tmp' . '/' . $temporaryFile->folder . '/' . $temporaryFile->file, 'product' . '/' . $imageName);
+                $extArray = explode('.', $temporaryFile->file);
 
-                    Storage::deleteDirectory('images/tmp/' . $temporaryFile->folder);
-                    $temporaryFile->delete();
-                }
+                $ext = last($extArray);
+                $productImage = new ProductImage();
+                $productImage->product_id = $product->id;
+                $productImage->src = 'NULL';
+                $productImage->save();
+
+                $imageName = $product->id . '-' . $productImage->id . '-' . time() .  '.' . $ext;
+                $productImage->src = $imageName;
+                $productImage->save();
+                Storage::copy('images/tmp' . '/' . $temporaryFile->folder . '/' . $temporaryFile->file, 'product' . '/' . $imageName);
+
+                Storage::deleteDirectory('images/tmp/' . $temporaryFile->folder);
+                $temporaryFile->delete();
+                // }
             }
-
-
             return response()->json([
                 'status' => true
             ]);
         } else {
-
+            $temporaryFiles = TemporaryFile::all();
             foreach ($temporaryFiles as $temporaryFile) {
                 Storage::deleteDirectory('images/tmp/' . $temporaryFile->folder);
                 $temporaryFile->delete();
@@ -128,6 +127,7 @@ class ProductController extends Controller
         $validator = Validator::make($request->all(), $rules);
 
 
+
         if ($validator->passes()) {
 
             $product->name = $request->name;
@@ -141,28 +141,26 @@ class ProductController extends Controller
             $product->save();
 
             $old_images  = ProductImage::where('product_id', $product->id)->get();
-            if (!empty($request->feature_image)) {
 
+            if ($request->feature_image) {
+                $temporaryFile = TemporaryFile::all()->first();
 
-                foreach ($temporaryFiles as $temporaryFile) {
+                $extArray = explode('.', $temporaryFile->file);
 
-                    $extArray = explode('.', $temporaryFile->file);
+                $ext = last($extArray);
+                $productImage = new ProductImage();
+                $productImage->product_id = $product->id;
+                $productImage->src = 'NULL';
+                $productImage->save();
 
-                    $ext = last($extArray);
-                    $productImage = new ProductImage();
-                    $productImage->product_id = $product->id;
-                    $productImage->src = 'NULL';
-                    $productImage->save();
+                $imageName = $product->id . '-' . $productImage->id . '-' . time() .  '.' . $ext;
+                $productImage->src = $imageName;
+                $productImage->save();
+                Storage::copy('images/tmp' . '/' . $temporaryFile->folder . '/' . $temporaryFile->file, 'product' . '/' . $imageName);
 
-                    $imageName = $product->id . '-' . $productImage->id . '-' . time() .  '.' . $ext;
-
-                    $productImage->src = $imageName;
-                    $productImage->save();
-                    Storage::copy('images/tmp' . '/' . $temporaryFile->folder . '/' . $temporaryFile->file, 'product' . '/' . $imageName);
-
-                    Storage::deleteDirectory('images/tmp/' . $temporaryFile->folder);
-                    $temporaryFile->delete();
-                }
+                Storage::deleteDirectory('images/tmp/' . $temporaryFile->folder);
+                $temporaryFile->delete();
+                // }
 
                 if ($old_images) {
                     foreach ($old_images as $image) {
